@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Application
+*.log
+hs_err_pid*
+
+# H2 Database
+*.db
+*.mv.db
+*.trace.db
+
+# Claude
+.claude/
