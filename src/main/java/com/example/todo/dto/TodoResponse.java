@@ -1,7 +1,10 @@
 package com.example.todo.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 
+@Schema(description = "Response body representing a TODO item")
 public class TodoResponse {
 
     private Long id;
