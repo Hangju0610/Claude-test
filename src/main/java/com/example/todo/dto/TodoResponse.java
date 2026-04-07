@@ -1,5 +1,6 @@
 package com.example.todo.dto;
 
+import com.example.todo.entity.Todo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,17 @@ public class TodoResponse {
     private Boolean completed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public static TodoResponse from(Todo todo) {
+        TodoResponse response = new TodoResponse();
+        response.setId(todo.getId());
+        response.setTitle(todo.getTitle());
+        response.setDescription(todo.getDescription());
+        response.setCompleted(todo.getCompleted());
+        response.setCreatedAt(todo.getCreatedAt());
+        response.setUpdatedAt(todo.getUpdatedAt());
+        return response;
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

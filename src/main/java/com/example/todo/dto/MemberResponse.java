@@ -1,5 +1,6 @@
 package com.example.todo.dto;
 
+import com.example.todo.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,15 @@ public class MemberResponse {
     private String username;
     private String email;
     private LocalDateTime createdAt;
+
+    public static MemberResponse from(Member member) {
+        MemberResponse response = new MemberResponse();
+        response.setId(member.getId());
+        response.setUsername(member.getUsername());
+        response.setEmail(member.getEmail());
+        response.setCreatedAt(member.getCreatedAt());
+        return response;
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
