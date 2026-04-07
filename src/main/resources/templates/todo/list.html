@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO List</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .todo-item { display: flex; align-items: center; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
+        .todo-item.completed { background: #f0f0f0; text-decoration: line-through; }
+        .todo-title { flex-grow: 1; }
+        .actions { display: flex; gap: 5px; }
+        .btn { padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; font-size: 14px; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; color: white; }
+        h1 { color: #333; }
+        .empty-message { color: #666; font-style: italic; }
+    </style>
+</head>
+<body>
+    <h1>TODO List</h1>
+    <a th:href="@{/todos/new}" class="btn btn-primary">New TODO</a>
+    <hr>
+
+    <div th:if="${#lists.isEmpty(todos)}" class="empty-message">
+        <p>No todos yet. Create one!</p>
+    </div>
+
+    <div th:each="todo : ${todos}" class="todo-item" th:classappend="${todo.completed} ? 'completed'">
+        <div class="todo-title">
+            <strong th:text="${todo.title}">Title</strong>
+            <p th:if="${todo.description}" th:text="${todo.description}" style="margin: 2px 0; color: #666; font-size: 14px;">Description</p>
+        </div>
+        <div class="actions">
+            <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-success" th:text="${todo.completed} ? 'Undo' : 'Done'">Toggle</button>
+            </form>
+            <a th:href="@{/todos/{id}/edit(id=${todo.id})}" class="btn btn-warning">Edit</a>
+            <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
