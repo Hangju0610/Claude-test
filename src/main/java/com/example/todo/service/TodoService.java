@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,19 +33,17 @@ public class TodoService {
     public List<TodoResponse> getAllTodos() {
         return todoRepository.findAll().stream()
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public TodoResponse getTodoById(Long id) {
-        Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException(id));
+        Todo todo = findTodoOrThrow(id);
         return toResponse(todo);
     }
 
     @Transactional
     public TodoResponse updateTodo(Long id, TodoRequest request) {
-        Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException(id));
+        Todo todo = findTodoOrThrow(id);
 
         todo.setTitle(request.getTitle());
         todo.setDescription(request.getDescription());
@@ -68,12 +65,16 @@ public class TodoService {
 
     @Transactional
     public TodoResponse toggleTodo(Long id) {
-        Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException(id));
-
+        Todo todo = findTodoOrThrow(id);
         todo.setCompleted(!todo.getCompleted());
+
         Todo saved = todoRepository.save(todo);
         return toResponse(saved);
+    }
+
+    private Todo findTodoOrThrow(Long id) {
+        return todoRepository.findById(id)
+                .orElseThrow(() -> new TodoNotFoundException(id));
     }
 
     private TodoResponse toResponse(Todo todo) {
