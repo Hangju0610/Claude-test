@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .member-item { display: flex; align-items: center; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
+        .member-info { flex-grow: 1; }
+        .member-email { color: #666; font-size: 14px; }
+        .member-date { color: #999; font-size: 12px; }
+        .btn { padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; font-size: 14px; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-info { background: #17a2b8; color: white; }
+        h1 { color: #333; }
+        .empty-message { color: #666; font-style: italic; }
+        .nav { margin-bottom: 15px; }
+        .nav a { margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a th:href="@{/todos}" class="btn btn-info">All TODOs</a>
+    </div>
+
+    <h1>Members</h1>
+    <a th:href="@{/members/new}" class="btn btn-primary">Register New Member</a>
+    <hr>
+
+    <div th:if="${#lists.isEmpty(members)}" class="empty-message">
+        <p>No members yet. Register one!</p>
+    </div>
+
+    <div th:each="member : ${members}" class="member-item">
+        <div class="member-info">
+            <strong th:text="${member.username}">Username</strong>
+            <p class="member-email" th:text="${member.email}">email@example.com</p>
+            <p class="member-date" th:text="'Joined: ' + ${member.createdAt}">Date</p>
+        </div>
+        <a th:href="@{/members/{id}/todos(id=${member.id})}" class="btn btn-info">View TODOs</a>
+    </div>
+</body>
+</html>

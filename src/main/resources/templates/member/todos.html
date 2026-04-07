@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member's TODOs</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .member-header { background: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .todo-item { display: flex; align-items: center; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
+        .todo-item.completed { background: #f0f0f0; text-decoration: line-through; }
+        .todo-title { flex-grow: 1; }
+        .actions { display: flex; gap: 5px; }
+        .btn { padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; font-size: 14px; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        h1 { color: #333; }
+        .empty-message { color: #666; font-style: italic; }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; margin-bottom: 3px; font-weight: bold; }
+        input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .new-todo-form { background: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <a th:href="@{/members}" class="btn btn-secondary">Back to Members</a>
+
+    <div class="member-header">
+        <h1><span th:text="${member.username}">User</span>'s TODOs</h1>
+        <p th:text="'Email: ' + ${member.email}">email</p>
+    </div>
+
+    <div class="new-todo-form">
+        <h3>Add New TODO</h3>
+        <form th:action="@{/members/{id}/todos(id=${member.id})}" th:object="${todoRequest}" method="post">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" th:field="*{title}" placeholder="Enter todo title">
+            </div>
+            <div class="form-group">
+                <label for="description">Description (optional)</label>
+                <input type="text" id="description" th:field="*{description}" placeholder="Enter description">
+            </div>
+            <button type="submit" class="btn btn-primary">Add TODO</button>
+        </form>
+    </div>
+
+    <div th:if="${#lists.isEmpty(todos)}" class="empty-message">
+        <p>No todos yet. Create one above!</p>
+    </div>
+
+    <div th:each="todo : ${todos}" class="todo-item" th:classappend="${todo.completed} ? 'completed'">
+        <div class="todo-title">
+            <strong th:text="${todo.title}">Title</strong>
+            <p th:if="${todo.description}" th:text="${todo.description}" style="margin: 2px 0; color: #666; font-size: 14px;">Description</p>
+        </div>
+        <div class="actions">
+            <form th:action="@{/members/{memberId}/todos/{todoId}/toggle(memberId=${member.id}, todoId=${todo.id})}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-success" th:text="${todo.completed} ? 'Undo' : 'Done'">Toggle</button>
+            </form>
+            <form th:action="@{/members/{memberId}/todos/{todoId}/delete(memberId=${member.id}, todoId=${todo.id})}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
