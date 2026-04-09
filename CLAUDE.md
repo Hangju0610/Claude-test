@@ -16,3 +16,4 @@ DB : Local 환경에서는 H2 database를 사용한다.
 
 ### 구현 기능
 1. TODO List CRUD 구현
+2. 회원 로직 개발 (회원가입, 회원 별 List 기능 구현)

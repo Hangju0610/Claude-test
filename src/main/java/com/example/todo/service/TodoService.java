@@ -27,18 +27,18 @@ public class TodoService {
         todo.setDescription(request.getDescription());
 
         Todo saved = todoRepository.save(todo);
-        return toResponse(saved);
+        return TodoResponse.from(saved);
     }
 
     public List<TodoResponse> getAllTodos() {
         return todoRepository.findAll().stream()
-                .map(this::toResponse)
+                .map(TodoResponse::from)
                 .toList();
     }
 
     public TodoResponse getTodoById(Long id) {
         Todo todo = findTodoOrThrow(id);
-        return toResponse(todo);
+        return TodoResponse.from(todo);
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class TodoService {
         }
 
         Todo saved = todoRepository.save(todo);
-        return toResponse(saved);
+        return TodoResponse.from(saved);
     }
 
     @Transactional
@@ -69,22 +69,11 @@ public class TodoService {
         todo.setCompleted(!todo.getCompleted());
 
         Todo saved = todoRepository.save(todo);
-        return toResponse(saved);
+        return TodoResponse.from(saved);
     }
 
     private Todo findTodoOrThrow(Long id) {
         return todoRepository.findById(id)
                 .orElseThrow(() -> new TodoNotFoundException(id));
-    }
-
-    private TodoResponse toResponse(Todo todo) {
-        TodoResponse response = new TodoResponse();
-        response.setId(todo.getId());
-        response.setTitle(todo.getTitle());
-        response.setDescription(todo.getDescription());
-        response.setCompleted(todo.getCompleted());
-        response.setCreatedAt(todo.getCreatedAt());
-        response.setUpdatedAt(todo.getUpdatedAt());
-        return response;
     }
 }

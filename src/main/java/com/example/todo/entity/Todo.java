@@ -26,6 +26,10 @@ public class Todo {
     @Column(nullable = false)
     private Boolean completed = false;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -62,4 +66,7 @@ public class Todo {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public Member getMember() { return member; }
+    public void setMember(Member member) { this.member = member; }
 }
